@@ -1,0 +1,39 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.gameboard{
+    display: grid;
+    height: 600px;
+    width: 600px;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
+}
+
+.gameboard div{
+    border: 5px solid black;
+    text-align: center;
+    font-size: 70px;
+    line-height: 200px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.gameboard div.cell-0, .gameboard div.cell-3, .gameboard div.cell-6{
+    border-left: none;
+}
+
+.gameboard div.cell-0, .gameboard div.cell-1, .gameboard div.cell-2{
+    border-top: none;
+}
+
+.gameboard div.cell-2, .gameboard div.cell-5, .gameboard div.cell-8{
+    border-right: none;
+}
+
+.gameboard div.cell-6, .gameboard div.cell-7, .gameboard div.cell-8{
+    border-bottom: none;
+}
+

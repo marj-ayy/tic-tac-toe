@@ -1,5 +1,5 @@
 const gameboard = (function () {
-    const gameboardArray = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
+    const gameboardArray = ['X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
     const getGameboard = () => gameboardArray;
     const modifyGameboard = (index, value) => gameboardArray[index] = value;
     return {getGameboard, modifyGameboard};
@@ -95,26 +95,53 @@ const Player = (name, character) => {
     return {getName, getCharacter};
 };
 
-let start = prompt("Start the game ? ");
-if(start !== "n"){
-    const pl1 = Player("Mark", 'X');
-    const pl2 = Player("Twain", 'O');
-    game.showGameboard();
-    do{
-        game.play();
-        game.showGameboard();
-        console.log("\n");
-        if(game.checkEnd() === '/')
-            game.changeCurrentPlayer();
-    }
-    while(game.checkEnd() === '/');
-    if(game.checkEnd() === 'D')
-        console.log("Draw.");
-    else{
-        if(pl1.getCharacter() == game.getCurrentPlayer())
-            console.log(`${pl1.getName()}, you won the game !`);
-        else
-            console.log(`${pl2.getName()}, you won the game !`);
 
+
+
+
+
+
+
+
+const displayController = (function (){
+    const updateDisplay = () => {
+        const tempGameboardArray = gameboard.getGameboard();
+        const cells = document.querySelectorAll(".gameboard div");
+        for(let i = 0; i <= 8; ++i){
+            cells[i].textContent = tempGameboardArray[i];
+        }
     }
-}
+    return {updateDisplay};
+})();
+
+
+
+
+
+displayController.updateDisplay();
+
+
+// let start = prompt("Start the game ? ");
+// if(start !== "n"){
+//     const pl1 = Player("Mark", 'X');
+//     const pl2 = Player("Twain", 'O');
+//     game.showGameboard();
+//     do{
+//         game.play();
+//         game.showGameboard();
+//         displayController.updateDisplay();
+//         console.log("\n");
+//         if(game.checkEnd() === '/')
+//             game.changeCurrentPlayer();
+//     }
+//     while(game.checkEnd() === '/');
+//     if(game.checkEnd() === 'D')
+//         console.log("Draw.");
+//     else{
+//         if(pl1.getCharacter() == game.getCurrentPlayer())
+//             console.log(`${pl1.getName()}, you won the game !`);
+//         else
+//             console.log(`${pl2.getName()}, you won the game !`);
+
+//     }
+// }
