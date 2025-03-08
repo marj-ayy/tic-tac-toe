@@ -1,5 +1,5 @@
 const gameboard = (function () {
-    const gameboardArray = ['X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
+    const gameboardArray = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
     const getGameboard = () => gameboardArray;
     const modifyGameboard = (index, value) => gameboardArray[index] = value;
     return {getGameboard, modifyGameboard};
@@ -7,11 +7,7 @@ const gameboard = (function () {
 
 
 const game = (function (){
-    let currentPlayer;
-    do{
-        currentPlayer = prompt("Initial Player (X or O) : ");
-    }
-    while(currentPlayer != 'X' && currentPlayer != 'O');
+    let currentPlayer = 'X';
     const getCurrentPlayer = () => currentPlayer;
     const changeCurrentPlayer = () => {
         if(getCurrentPlayer() === 'X')
@@ -25,21 +21,10 @@ const game = (function (){
         console.log(`${tempGameboardArray[3]} | ${tempGameboardArray[4]} | ${tempGameboardArray[5]}`);
         console.log(`${tempGameboardArray[6]} | ${tempGameboardArray[7]} | ${tempGameboardArray[8]}`);
     };
-    const play = () => {
+    const play = (index) => {
         let character = getCurrentPlayer();
         const tempGameboardArray = gameboard.getGameboard()
-        let round;
-        let result;
-        do{
-            round = prompt(`Player ${character}, choose an index between 0 and 8 : `);
-            if(parseInt(round) <= 8 && parseInt(round) >= 0 &&  tempGameboardArray[parseInt(round)] === ' '){
-                gameboard.modifyGameboard(parseInt(round), character);
-                result = true;
-            }
-            else
-                result = false;
-        }
-        while(result === false);
+        tempGameboardArray[index] = character;
     };
 
     const checkVertical = () => {
@@ -95,14 +80,6 @@ const Player = (name, character) => {
     return {getName, getCharacter};
 };
 
-
-
-
-
-
-
-
-
 const displayController = (function (){
     const updateDisplay = () => {
         const tempGameboardArray = gameboard.getGameboard();
@@ -111,37 +88,34 @@ const displayController = (function (){
             cells[i].textContent = tempGameboardArray[i];
         }
     }
-    return {updateDisplay};
+
+    const updateCell = (e) => {
+        if(game.checkEnd() === '/'){
+            if(e.target.textContent === ' '){
+                let index = parseInt(e.target.className.slice(-1));
+                game.play(index);
+                updateDisplay();
+                if(game.checkEnd() !== game.getCurrentPlayer()){
+                    if(game.checkEnd() === 'D'){
+                        const result = document.querySelector(".result");
+                        result.textContent = "Draw";
+                    }
+                    else
+                        game.changeCurrentPlayer();
+                }
+                else{
+                    const result = document.querySelector(".result")
+                    result.textContent = `Player with ${game.getCurrentPlayer()} has won`;
+                }
+            }
+        }
+    };
+
+    return {updateDisplay, updateCell};
 })();
 
-
-
-
-
 displayController.updateDisplay();
-
-
-// let start = prompt("Start the game ? ");
-// if(start !== "n"){
-//     const pl1 = Player("Mark", 'X');
-//     const pl2 = Player("Twain", 'O');
-//     game.showGameboard();
-//     do{
-//         game.play();
-//         game.showGameboard();
-//         displayController.updateDisplay();
-//         console.log("\n");
-//         if(game.checkEnd() === '/')
-//             game.changeCurrentPlayer();
-//     }
-//     while(game.checkEnd() === '/');
-//     if(game.checkEnd() === 'D')
-//         console.log("Draw.");
-//     else{
-//         if(pl1.getCharacter() == game.getCurrentPlayer())
-//             console.log(`${pl1.getName()}, you won the game !`);
-//         else
-//             console.log(`${pl2.getName()}, you won the game !`);
-
-//     }
-// }
+const cells = document.querySelectorAll(".gameboard div");
+for(const cell of cells){
+    cell.addEventListener("click", displayController.updateCell);
+}
