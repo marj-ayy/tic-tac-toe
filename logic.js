@@ -100,8 +100,11 @@ const displayController = (function (){
                         const result = document.querySelector(".result");
                         result.textContent = "Draw";
                     }
-                    else
+                    else{
                         game.changeCurrentPlayer();
+                        const turn = document.querySelector(".turn");
+                        turn.textContent = `Turn of player with character : ${game.getCurrentPlayer()}`;
+                    }
                 }
                 else{
                     const result = document.querySelector(".result")
