@@ -38,19 +38,37 @@ body{
     border-bottom: none;
 }
 
-.turn, .result{
+.turn, .result, .names{
     font-family: 'Courier New', Courier, monospace;
     font-size: 30px;
     text-align: center;
     
 }
 
-.restart{
+button[type="submit"], .restart{
     border: none;
     color: white;
-    background-color: red;
     font-size: medium;
     font-family: 'Courier New', Courier, monospace;
     border-radius: 15px;
     padding: 5px 15px;
 }
+
+.restart{
+    background-color: red;
+}
+
+button[type="submit"]{
+    background-color: green;
+    margin-top: 10px;
+}
+
+form{
+    margin-top: 20px;
+}
+
+form, input{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+}
+

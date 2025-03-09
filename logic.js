@@ -78,19 +78,24 @@ const game = (function (){
         }
         displayController.updateDisplay();
         currentPlayer = 'X';
-        const turn = document.querySelector(".turn");
-        turn.textContent = `Turn of player with character : ${getCurrentPlayer()}`;
-        const result = document.querySelector(".result");
-        result.textContent = "";
+        const formElement = document.querySelector("form");
+        if(formElement === null){
+            const turn = document.querySelector(".turn");
+            turn.textContent = `Turn of ${player1.getName()}`;
+            const result = document.querySelector(".result");
+            result.textContent = "";
+        }
     };
 
     return {getCurrentPlayer, changeCurrentPlayer, checkEnd, showGameboard, play, restart};
 })();
 
-const Player = (name, character) => {
+const Player = (character) => {
+    let name = "";
     const getName = () => name;
     const getCharacter = () => character;
-    return {getName, getCharacter};
+    const modifyName = (newName) => name = newName;
+    return {getName, getCharacter, modifyName};
 };
 
 const displayController = (function (){
@@ -103,31 +108,51 @@ const displayController = (function (){
     }
 
     const updateCell = (e) => {
-        if(game.checkEnd() === '/'){
-            if(e.target.textContent === ' '){
-                let index = parseInt(e.target.className.slice(-1));
-                game.play(index);
-                updateDisplay();
-                if(game.checkEnd() !== game.getCurrentPlayer()){
-                    if(game.checkEnd() === 'D'){
-                        const result = document.querySelector(".result");
-                        result.textContent = "Draw";
+        const formElement = document.querySelector("form");
+        if(formElement === null){
+            if(game.checkEnd() === '/'){
+                if(e.target.textContent === ' '){
+                    let index = parseInt(e.target.className.slice(-1));
+                    game.play(index);
+                    updateDisplay();
+                    if(game.checkEnd() !== game.getCurrentPlayer()){
+                        if(game.checkEnd() === 'D'){
+                            const result = document.querySelector(".result");
+                            result.textContent = "Draw";
+                        }
+                        else{
+                            game.changeCurrentPlayer();
+                            const turn = document.querySelector(".turn");
+                            if(game.getCurrentPlayer() === player1.getCharacter())
+                                turn.textContent = `Turn of ${player1.getName()}`;
+                            else
+                                turn.textContent = `Turn of ${player2.getName()}`;
+                        }
                     }
                     else{
-                        game.changeCurrentPlayer();
-                        const turn = document.querySelector(".turn");
-                        turn.textContent = `Turn of player with character : ${game.getCurrentPlayer()}`;
+                        const result = document.querySelector(".result")
+                        if(game.getCurrentPlayer() === player1.getCharacter())
+                            result.textContent = `${player1.getName()} has won the game.`;
+                        else
+                            result.textContent = `${player2.getName()} has won the game.`;
                     }
-                }
-                else{
-                    const result = document.querySelector(".result")
-                    result.textContent = `Player with character ${game.getCurrentPlayer()} has won`;
                 }
             }
         }
     };
 
-    return {updateDisplay, updateCell};
+    const updateName = (e) => {
+        e.preventDefault();
+        const names = document.querySelector(".names");
+        player1.modifyName(e.target.children[1].value);
+        player2.modifyName(e.target.children[3].value);
+        names.textContent = `Player 1 (X) : ${player1.getName()} / Player 2 (O) : ${player2.getName()}`;
+        const turn = document.querySelector(".turn");
+        turn.textContent = `Turn of ${player1.getName()}`;
+        document.body.removeChild(e.target);
+    };
+
+    return {updateDisplay, updateCell, updateName};
 })();
 
 displayController.updateDisplay();
@@ -137,3 +162,10 @@ for(const cell of cells){
 }
 const restartButton = document.querySelector(".restart");
 restartButton.addEventListener("click", game.restart);
+
+const form = document.querySelector("form");
+form.addEventListener("submit", displayController.updateName);
+
+const player1 = Player("X");
+
+const player2 = Player("O");

@@ -9,7 +9,7 @@
 </head>
 <body>
     <button class="restart">Restart</button>
-    <p class="turn">Turn of player with character : X</p>
+    <p class="turn"></p>
     <div class="gameboard">
         <div class="cell-0"></div>
         <div class="cell-1"></div>
@@ -21,6 +21,14 @@
         <div class="cell-7"></div>
         <div class="cell-8"></div>
     </div>
+    <form action="" method="post">
+        <label for="name1">Name of player 1 : </label>
+        <input type="text" name="name1" id="name1" required>
+        <label for="name2">Name of player 2 : </label>
+        <input type="text" name="name2" id="name2" required><br>
+        <button type="submit">Validate Names</button>
+    </form>
     <p class="result"></p>
+    <p class="names"></p>
 </body>
 </html>
