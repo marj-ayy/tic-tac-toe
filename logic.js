@@ -71,7 +71,20 @@ const game = (function (){
         else
             return '/';
     };
-    return {getCurrentPlayer, changeCurrentPlayer, checkEnd, showGameboard, play};
+
+    const restart = () => {
+        for(let i = 0; i <= 8; ++i){
+            gameboard.modifyGameboard(i, ' ');
+        }
+        displayController.updateDisplay();
+        currentPlayer = 'X';
+        const turn = document.querySelector(".turn");
+        turn.textContent = `Turn of player with character : ${getCurrentPlayer()}`;
+        const result = document.querySelector(".result");
+        result.textContent = "";
+    };
+
+    return {getCurrentPlayer, changeCurrentPlayer, checkEnd, showGameboard, play, restart};
 })();
 
 const Player = (name, character) => {
@@ -108,7 +121,7 @@ const displayController = (function (){
                 }
                 else{
                     const result = document.querySelector(".result")
-                    result.textContent = `Player with ${game.getCurrentPlayer()} has won`;
+                    result.textContent = `Player with character ${game.getCurrentPlayer()} has won`;
                 }
             }
         }
@@ -122,3 +135,5 @@ const cells = document.querySelectorAll(".gameboard div");
 for(const cell of cells){
     cell.addEventListener("click", displayController.updateCell);
 }
+const restartButton = document.querySelector(".restart");
+restartButton.addEventListener("click", game.restart);
